@@ -109,6 +109,8 @@ namespace logchecker
                 foreach  (Pattern p in l.listpatterns)
                 {
                     Console.WriteLine(p.ptype + p.patterntext);
+
+
                 }
             }
                           
