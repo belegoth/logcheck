@@ -120,6 +120,8 @@ namespace logchecker
 
             }
 
+
+            Console.WriteLine("new branch");
             
             
             }
