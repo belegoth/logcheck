@@ -98,25 +98,30 @@ namespace logchecker
 
 
             //DeSerializer
+            try {
+                TextReader reader = new StreamReader("logfile.xml");
+                XmlSerializer x = new XmlSerializer(typeof(Logfiles));
+                Logfiles listlogs = (Logfiles)x.Deserialize(reader);
 
-            TextReader reader = new StreamReader("logfile.xml");
-            XmlSerializer x = new XmlSerializer(typeof(Logfiles));
-            Logfiles listlogs = (Logfiles)x.Deserialize(reader);
-            
-            foreach (Logfile l in listlogs.ListFiles)
-            {
-                Console.WriteLine(l.filename);
-                foreach  (Pattern p in l.listpatterns)
+                foreach (Logfile l in listlogs.ListFiles)
                 {
-                    Console.WriteLine(p.ptype + p.patterntext);
+                    Console.WriteLine(l.filename);
+                    foreach (Pattern p in l.listpatterns)
+                    {
+                        Console.WriteLine(p.ptype + p.patterntext);
+                        Console.ReadLine();
 
-
+                    }
                 }
             }
-                          
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+
             
-                
-                Console.ReadLine();
+            
             }
         }
 
