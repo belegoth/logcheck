@@ -79,7 +79,7 @@ namespace logchecker
     {
 
 
-        public void serializeconfig()
+        public static void serializeconfig()
         {
 
             try
@@ -94,8 +94,8 @@ namespace logchecker
                 logfile.listpatterns.Add(new Pattern() { ptype = PType.include, patterntext = "text to include" });
 
 
-                logfiles.ListFiles.Add(new Logfile { filename = "file1", active = true, checkupdatetime = true, updatetimelimit = 20, listpatterns = logfile.listpatterns });
-                logfiles.ListFiles.Add(new Logfile { filename = "file2", active = true, checkupdatetime = false });
+                logfiles.ListFiles.Add(new Logfile { filename = "file1.txt", active = true, checkupdatetime = true, updatetimelimit = 20, listpatterns = logfile.listpatterns });
+                logfiles.ListFiles.Add(new Logfile { filename = "file2.txt", active = true, checkupdatetime = false });
 
 
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Logfiles));
@@ -121,7 +121,7 @@ namespace logchecker
             //DeSerializer
             try
             {
-                TextReader reader = new StreamReader("logfile.xml");
+                TextReader reader = new StreamReader("logfileconfig.xml");
                 XmlSerializer x = new XmlSerializer(typeof(Logfiles));
                 Logfiles listlogs = (Logfiles)x.Deserialize(reader);
                 return listlogs.ListFiles;

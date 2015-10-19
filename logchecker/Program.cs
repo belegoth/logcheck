@@ -14,44 +14,20 @@ namespace logchecker
    
     class Program
     {
-
-        
+               
         static void Main(string[] args)
         {
 
-            Serializer.serializepozition();
 
-    
-            List<Lastposition> listposition = Serializer.deserializeposition();
-            foreach (Lastposition lp in listposition)
-            {
-                Console.WriteLine(lp.lastpositionfilename);
-                Console.WriteLine(lp.lastposition);
-            }
+            //Serializer.serializeconfig();
 
+            Checklog.Printinfo();
             Console.Read();
-
-            List<Logfile> listconfig = Serializer.deserializeconfig();
-
-            foreach (Logfile l in listconfig)
-            {
-                Console.WriteLine(l.filename);
-                foreach (Pattern p in l.listpatterns)
-                {
-                    Console.WriteLine(p.ptype + p.patterntext);
-                    Console.ReadLine();
-
-                }
-            }
-
-
 
 
         }
 
-
     }
-
 
     }
     
