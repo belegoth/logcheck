@@ -24,12 +24,14 @@ namespace logchecker
             else
             {
                 try {
+                    int i = 0;
                     FileStream file = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     StreamReader sr = new StreamReader(file, Encoding.GetEncoding("windows-1251"));
                     while (!sr.EndOfStream)
                     {
+                        
                         string line = sr.ReadLine();
-
+                        i += 1;
                         List<string> incpatterns = new List<string>();
                         List<string> excpatterns = new List<string>();
 
@@ -47,7 +49,8 @@ namespace logchecker
                         }
 
 
-                        if (incpatterns.Any(line.Contains)) {
+                        if (incpatterns.Any(line.Contains))
+                        {
 
                             if (!excpatterns.Any(line.Contains))
                             {
@@ -61,7 +64,7 @@ namespace logchecker
 
                     }
 
-
+                    Console.WriteLine("Total lines: {0}",i);
                     
 
 
