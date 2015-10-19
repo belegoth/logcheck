@@ -56,15 +56,34 @@ namespace logchecker
     }
 
 
-  
-
-    class Program
+    public class Lastposition
     {
-        static void Main(string[] args)
+
+        [XmlElement("filename")]
+        public string lastpositionfilename { get; set; }
+        [XmlElement("lastposition")]
+        public int lastposition { get; set; }
+        [XmlElement("lastchecktime")]
+        public DateTime lastchecktime { get; set; }
+
+    }
+
+    public class Lastpositions
+    {
+        [XmlArray("logfiles"), XmlArrayItem("logfile")]
+
+        public List<Lastposition> ListPositions { get; set; }
+
+
+    }
+
+    public class serializer
+    {
+                
+
+        public void serializeconfig()
         {
 
-
-            //Serializer
             try
             {
 
@@ -72,17 +91,17 @@ namespace logchecker
                 logfiles.ListFiles = new List<Logfile>();
 
                 Logfile logfile = new Logfile();
-                logfile.listpatterns.Add(new Pattern() { ptype = PType.exclude , patterntext="text to exclude"});
-                logfile.listpatterns.Add(new Pattern() { ptype = PType.exclude , patterntext="text2 to exclude" });
-                logfile.listpatterns.Add(new Pattern() { ptype = PType.include , patterntext="text to include" });
+                logfile.listpatterns.Add(new Pattern() { ptype = PType.exclude, patterntext = "text to exclude" });
+                logfile.listpatterns.Add(new Pattern() { ptype = PType.exclude, patterntext = "text2 to exclude" });
+                logfile.listpatterns.Add(new Pattern() { ptype = PType.include, patterntext = "text to include" });
 
 
-                logfiles.ListFiles.Add(new Logfile { filename = "file1", active = true, checkupdatetime = true, updatetimelimit = 20, listpatterns=logfile.listpatterns });
+                logfiles.ListFiles.Add(new Logfile { filename = "file1", active = true, checkupdatetime = true, updatetimelimit = 20, listpatterns = logfile.listpatterns });
                 logfiles.ListFiles.Add(new Logfile { filename = "file2", active = true, checkupdatetime = false });
 
 
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Logfiles));
-                StreamWriter sw = new StreamWriter("logfile.xml");
+                StreamWriter sw = new StreamWriter("logfileconfig.xml");
                 xmlSerializer.Serialize(sw, logfiles);
                 sw.Close();
                 Console.WriteLine("Serialize complete");
@@ -94,36 +113,132 @@ namespace logchecker
             {
                 Console.WriteLine(ex.Message);
 
-                  }
+            }
+        }
 
+        public static List<Logfile> deserializeconfig()
+
+        { 
 
             //DeSerializer
-            try {
+            try
+            {
                 TextReader reader = new StreamReader("logfile.xml");
                 XmlSerializer x = new XmlSerializer(typeof(Logfiles));
                 Logfiles listlogs = (Logfiles)x.Deserialize(reader);
+                return listlogs.ListFiles;
+           
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
 
-                foreach (Logfile l in listlogs.ListFiles)
-                {
-                    Console.WriteLine(l.filename);
-                    foreach (Pattern p in l.listpatterns)
-                    {
-                        Console.WriteLine(p.ptype + p.patterntext);
-                        Console.ReadLine();
 
-                    }
-                }
+        }
+
+
+        public static void serializepozition()
+        {
+
+            try
+            {
+
+
+                Lastpositions lastpositions = new Lastpositions();
+                lastpositions.ListPositions = new List<Lastposition>();
+
+                lastpositions.ListPositions.Add(new Lastposition { lastpositionfilename="file1",  lastposition = 123, lastchecktime = DateTime.Now });
+                lastpositions.ListPositions.Add(new Lastposition { lastpositionfilename = "file2", lastposition = 1343, lastchecktime = DateTime.Now });
+
+
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(Lastpositions));
+                StreamWriter sw = new StreamWriter("lastposition.xml");
+                xmlSerializer.Serialize(sw, lastpositions);
+                sw.Close();
+                Console.WriteLine("Lastposition serialize complete");
+
+
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
 
             }
-
-            
-            
-            }
         }
+
+        public static List<Lastposition> deserializeposition()
+
+        {
+
+            //DeSerializer
+            try
+            {
+                TextReader reader = new StreamReader("lastposition.xml");
+                XmlSerializer x = new XmlSerializer(typeof(Lastpositions));
+                Lastpositions listpositions = (Lastpositions)x.Deserialize(reader);
+                return listpositions.ListPositions;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+
+        }
+
+
+    }
+  
+
+
+
+
+    class Program
+    {
+
+        
+        static void Main(string[] args)
+        {
+
+            serializer.serializepozition();
+
+    
+            List<Lastposition> listposition = serializer.deserializeposition();
+            foreach (Lastposition lp in listposition)
+            {
+                Console.WriteLine(lp.lastpositionfilename);
+                Console.WriteLine(lp.lastposition);
+            }
+
+            Console.Read();
+
+            List<Logfile> listconfig = serializer.deserializeconfig();
+
+            foreach (Logfile l in listconfig)
+            {
+                Console.WriteLine(l.filename);
+                foreach (Pattern p in l.listpatterns)
+                {
+                    Console.WriteLine(p.ptype + p.patterntext);
+                    Console.ReadLine();
+
+                }
+            }
+
+
+
+
+        }
+
+
+    }
 
 
     }
